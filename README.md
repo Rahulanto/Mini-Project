@@ -1,14 +1,7 @@
-# Mini-Project
-Mini project on traffic stops
 import pandas as pd
 import streamlit as st
 import mysql.connector
-import plotly.express as px
-import pytest
-import pandas as pd
 from sqlalchemy import create_engine, text
-import streamlit as st
-
 # Corrected DB connection string
 DATABASE_URL = "mysql+pymysql://root:Rahul%4098@localhost:3306/Police1"
 
@@ -48,28 +41,31 @@ with tabs[0]:
  
     st.subheader("1️⃣ Top 10 Vehicle Numbers Involved In Drug-Related Stops")
     q1 = """
+
 SELECT 
     vehicle_number,
     COUNT(*) AS drug_related_stop_count
-FROM  traffic_data
-
-WHERE drugs_related_stop IS TRUE
+FROM traffic_data
+WHERE LOWER(drugs_related_stop) IN ('true', 'yes')
 GROUP BY vehicle_number
 ORDER BY drug_related_stop_count DESC
 LIMIT 10;
+
 """
     st.dataframe(beautify_headers(run_query(q1)), use_container_width=True)
  
     st.subheader("2️⃣ Vehicles Most Frequently Searched")
     q2 = """
+
 SELECT 
     vehicle_number,
     COUNT(*) AS search_count
 FROM traffic_data
-WHERE search_conducted IS TRUE
+WHERE LOWER(search_conducted) IN ('yes', 'true')
 GROUP BY vehicle_number
 ORDER BY search_count DESC
 LIMIT 10;
+
 """
     st.dataframe(beautify_headers(run_query(q2)), use_container_width=True)
  
